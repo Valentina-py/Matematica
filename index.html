@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Plataforma interactiva de estudio: Lógica, Conjuntos, Números Reales y Números Complejos. Introducción a la Matemática." />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>Estudio de Matemática · Plataforma interactiva</title>
+
+  <!-- KaTeX para renderizar fórmulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital@0;1&display=swap" rel="stylesheet" />
+</head>
+<body data-theme="light">
+
+  <!-- ======================= SIDEBAR ======================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <div class="brand__logo">∑</div>
+      <div class="brand__text">
+        <strong>Estudio Matemática</strong>
+        <span>Introducción a la Matemática</span>
+      </div>
+      <button class="sidebar__close" id="sidebarClose" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    <div class="sidebar__search">
+      <input type="search" id="searchInput" placeholder="Buscar tema, fórmula…" autocomplete="off" />
+      <div class="search__results" id="searchResults"></div>
+    </div>
+
+    <nav class="sidebar__nav" id="mainNav"><!-- generado por JS --></nav>
+
+    <div class="sidebar__footer">
+      <div class="progress-mini">
+        <div class="progress-mini__label">Progreso general</div>
+        <div class="progress-bar"><span id="globalProgressBar"></span></div>
+        <div class="progress-mini__pct" id="globalProgressPct">0%</div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar__overlay" id="sidebarOverlay"></div>
+
+  <!-- ======================= MAIN ======================= -->
+  <div class="app">
+    <header class="topbar">
+      <button class="topbar__menu" id="menuToggle" aria-label="Abrir menú">☰</button>
+      <div class="topbar__crumbs" id="breadcrumbs">Inicio</div>
+      <div class="topbar__actions">
+        <button class="icon-btn" id="themeToggle" title="Modo claro / oscuro" aria-label="Cambiar tema">🌙</button>
+      </div>
+    </header>
+
+    <main class="content" id="content"><!-- generado por JS --></main>
+
+    <footer class="footer">
+      <span>Hecho para estudiar mejor · Lógica · Conjuntos · Reales · Complejos</span>
+    </footer>
+  </div>
+
+  <!-- ======================= SCRIPTS ======================= -->
+  <script src="js/data.js"></script>
+  <script src="js/practice.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/complex.js"></script>
+  <script src="js/sets.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
