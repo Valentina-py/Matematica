@@ -6,6 +6,20 @@
   const DATA = window.APP_DATA;
   const UNITS = DATA.units;
   const PRACTICE = DATA.practica || [];
+  const GAMES = [
+    { id: "classify", icon: "target", title: "Clasificá el número", desc: "Mandá cada número a su conjunto: ℕ, ℤ, ℚ, 𝕀 o ℂ." },
+    { id: "vof", icon: "timer", title: "Verdadero o Falso", desc: "Decidí V o F sobre las propiedades antes de que termine el tiempo." },
+    { id: "memo", icon: "cards", title: "Memotest matemático", desc: "Emparejá símbolos, nombres y fórmulas de memoria." },
+    { id: "ipow", icon: "spiral", title: "Potencias de iⁿ", desc: "Elegí el valor de iⁿ lo más rápido posible." },
+    { id: "chain", icon: "sort", title: "Ordená la cadena", desc: "Ordená conjuntos por inclusión y números de menor a mayor." },
+    { id: "truthbuild", icon: "truth", title: "Constructor de tablas", desc: "Completá la columna resultado de cada tabla de verdad." },
+    { id: "vennguess", icon: "venn", title: "Venn a ciegas", desc: "Mirá la región sombreada y adiviná la operación de conjuntos." },
+    { id: "hangman", icon: "letters", title: "Ahorcado matemático", desc: "Adiviná la palabra del vocabulario con su pista." },
+    { id: "connect", icon: "link", title: "Conectá", desc: "Uní cada expresión con su valor en dos columnas." },
+    { id: "cxquiz", icon: "calc", title: "Operá complejos", desc: "Resolvé operaciones con complejos contra el reloj." },
+    { id: "spot", icon: "search", title: "Cazá el error", desc: "Decidí si el paso resuelto está bien o tiene un error." },
+  ];
+  const gameById = id => GAMES.find(g => g.id === id);
   const $ = sel => document.querySelector(sel);
 
   /* ---------------- Iconos (SVG de línea, sin emojis) ---------------- */
@@ -28,6 +42,14 @@
     check: '<path d="m5 12 4.5 4.5L19 7"/>',
     cross: '<path d="M6 6l12 12M18 6 6 18"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    games: '<rect x="2" y="7" width="20" height="11" rx="4"/><path d="M6.5 11v3M5 12.5h3"/><circle cx="16" cy="11.5" r="1.1"/><circle cx="18.5" cy="14" r="1.1"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>',
+    timer: '<circle cx="12" cy="13" r="8"/><path d="M12 13V8.5M9.5 2.5h5M18.5 6l1.2-1.2"/>',
+    sort: '<path d="M7 4v16M7 4 4 7M7 4l3 3"/><path d="M17 20V4M17 20l-3-3M17 20l3-3"/>',
+    link: '<path d="M9 12h6"/><path d="M10 8H7a4 4 0 0 0 0 8h3"/><path d="M14 8h3a4 4 0 0 1 0 8h-3"/>',
+    letters: '<path d="M4 7V5h16v2M9 5v14M7 19h4"/>',
+    calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 11v4M8 18h4"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/>',
   };
   function icon(name, cls) {
     return `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -104,6 +126,8 @@
     html += navItem("#/practica", icon("practice"), "Ejercicios (TP)", null);
     html += navItem("#/cards", icon("cards"), "Flashcards", null);
     html += navItem("#/quiz", icon("quiz"), "Autoevaluación", null);
+    html += `<div class="nav__group-title">Juegos</div>`;
+    html += navItem("#/games", icon("games"), `Todos los juegos (${GAMES.length})`, null);
     nav.innerHTML = html;
   }
   function navItem(href, ic, label, unit) {
@@ -126,11 +150,14 @@
     const content = $("#content");
     content.scrollTop = 0;
     window.scrollTo(0, 0);
+    if (window.Games && window.Games.stopAll) window.Games.stopAll();
 
     let crumb = "Inicio";
     if (root === "") renderHome();
     else if (root === "unit") { crumb = unitById(id)?.title || "Unidad"; renderUnit(id); }
     else if (root === "tool") { crumb = "Herramienta"; renderToolPage(id); }
+    else if (root === "games" && id) { crumb = "Juegos"; renderGame(id); }
+    else if (root === "games") { crumb = "Juegos"; renderGamesMenu(); }
     else if (root === "quiz" && id) { crumb = "Autoevaluación"; renderQuiz(id); }
     else if (root === "quiz") { crumb = "Autoevaluación"; renderQuizMenu(); }
     else if (root === "cards" && id) { crumb = "Flashcards"; renderCards(id); }
@@ -180,6 +207,7 @@
       <div class="stat-row">
         <div class="stat"><div class="stat__num">${UNITS.length}</div><div class="stat__label">Unidades</div></div>
         <div class="stat"><div class="stat__num">4</div><div class="stat__label">Herramientas</div></div>
+        <div class="stat"><div class="stat__num">${GAMES.length}</div><div class="stat__label">Juegos</div></div>
         <div class="stat"><div class="stat__num">${totalEx}</div><div class="stat__label">Ejercicios TP</div></div>
         <div class="stat"><div class="stat__num">${globalPct()}%</div><div class="stat__label">Progreso</div></div>
       </div>
@@ -201,6 +229,14 @@
         <a class="btn" href="#/cards">${icon("cards")} Flashcards</a>
         <a class="btn" href="#/quiz">${icon("quiz")} Autoevaluación</a>
         <a class="btn" href="#/progress">${icon("progress")} Mi progreso</a>
+      </div>
+
+      <h2>Juegos de aprendizaje</h2>
+      <div class="tool-grid">
+        ${GAMES.map(g => `<a class="tool-card" href="#/games/${g.id}">
+          <span class="tool-card__ic">${icon(g.icon)}</span>
+          <div><div class="tool-card__title">${g.title}</div>
+          <div class="unit-card__desc">${g.desc}</div></div></a>`).join("")}
       </div>
     `);
   }
@@ -263,6 +299,45 @@
     const c = mount(`<h1 class="page-title">${icon(UNIT_TOOL_ICON[id], "ic--title")} ${t[0]}</h1><p class="page-sub">${t[1]}</p><div id="toolMount"></div>`);
     window.Tools[id](c.querySelector("#toolMount"));
     window.MathJaxRender(c);
+  }
+
+  /* ---------------- JUEGOS ---------------- */
+  function gameBestText(id) {
+    const b = window.Games && window.Games.getBest ? window.Games.getBest(id) : null;
+    if (b == null) return "Sin jugar todavía";
+    if (typeof b === "number") return `Mejor: ${b} ${id === "hangman" ? "palabras" : "aciertos"}`;
+    if (b.moves != null) return `Mejor: ${b.moves} movimientos`;
+    if (b.mistakes != null) return `Mejor: ${b.mistakes} errores`;
+    if (b.score != null) return `Mejor: ${b.score} aciertos`;
+    return "Jugado";
+  }
+  function renderGamesMenu() {
+    const items = GAMES.map(g => `
+      <a class="unit-card" href="#/games/${g.id}">
+        <div class="unit-card__head">
+          <span class="tool-card__ic">${icon(g.icon)}</span>
+          <span class="unit-card__num">${gameBestText(g.id)}</span>
+        </div>
+        <div class="unit-card__title">${g.title}</div>
+        <div class="unit-card__desc">${g.desc}</div>
+      </a>`).join("");
+    mount(`
+      <h1 class="page-title">${icon("games","ic--title")} Juegos de aprendizaje</h1>
+      <p class="page-sub">Aprendé jugando: clasificá números, corré contra el reloj y ejercitá la memoria. Tu mejor marca se guarda en este dispositivo.</p>
+      <div class="unit-grid">${items}</div>`);
+  }
+  function renderGame(id) {
+    const g = gameById(id);
+    if (!g || !window.Games || !window.Games[id]) return renderGamesMenu();
+    const c = mount(`
+      <div class="chip">${icon("games")} Juego</div>
+      <h1 class="page-title" style="margin-top:10px">${icon(g.icon,"ic--title")} ${g.title}</h1>
+      <p class="page-sub">${g.desc}</p>
+      <div id="gameMount"></div>
+      <div class="pager"><span></span>
+        <a class="next" href="#/games"><small>Más juegos →</small>Volver a la lista</a>
+      </div>`);
+    window.Games[id](c.querySelector("#gameMount"));
   }
 
   /* ---------------- PRÁCTICA (Trabajos Prácticos) ---------------- */
@@ -519,6 +594,18 @@
         <p class="muted">Progreso general</p>
       </div>
       ${rows}
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          ${icon("games","ic--title")}<strong>Juegos · mejores marcas</strong>
+        </div>
+        <div class="game-best-grid">
+          ${GAMES.map(g => `<div class="game-best">
+            <span class="game-best__ic">${icon(g.icon)}</span>
+            <div><div class="game-best__title">${g.title}</div>
+            <div class="muted" style="font-size:12.5px">${gameBestText(g.id)}</div></div>
+          </div>`).join("")}
+        </div>
+      </div>
       <div class="btn-row">
         <button class="btn" id="resetProg">${icon("trash")} Reiniciar progreso</button>
       </div>`);
@@ -543,13 +630,15 @@
       });
     });
     PRACTICE.forEach(t => idx.push({ title: t.title, sub: "Práctica · ejercicios", href: `#/practica/${t.id}`, hay: (t.title + " " + t.desc).toLowerCase() }));
+    GAMES.forEach(g => idx.push({ title: g.title, sub: "Juego", href: `#/games/${g.id}`, hay: (g.title + " " + g.desc).toLowerCase() }));
     [["Tablas de verdad","Herramienta","#/tool/logica"],
      ["Diagramas de Venn","Herramienta","#/tool/conjuntos"],
      ["Valor absoluto","Herramienta","#/tool/reales"],
      ["Calculadora de complejos","Herramienta","#/tool/complejos"],
      ["Ejercicios de los TP","Práctica","#/practica"],
      ["Autoevaluación","Práctica","#/quiz"],
-     ["Flashcards","Práctica","#/cards"]].forEach(([t,s,h]) =>
+     ["Flashcards","Práctica","#/cards"],
+     ["Juegos de aprendizaje","Sección","#/games"]].forEach(([t,s,h]) =>
        idx.push({ title: t, sub: s, href: h, hay: t.toLowerCase() }));
     return idx;
   }

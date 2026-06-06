@@ -326,14 +326,88 @@ window.APP_DATA = {
       <p class="lead">Los <strong>números reales</strong> \\(\\mathbb{R}\\) se representan sobre una recta. El <strong>valor absoluto</strong> mide la distancia de un número al origen.</p>
 
       <h2>Conjuntos numéricos</h2>
-      <div class="formula-box">$$ \\mathbb{N} \\subset \\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R} $$</div>
-      <ul>
-        <li>\\(\\mathbb{N}\\): naturales \\(\\{1,2,3,\\dots\\}\\)</li>
-        <li>\\(\\mathbb{Z}\\): enteros \\(\\{\\dots,-2,-1,0,1,2,\\dots\\}\\)</li>
-        <li>\\(\\mathbb{Q}\\): racionales (fracciones \\(a/b\\), \\(b\\neq 0\\))</li>
-        <li>\\(\\mathbb{I}\\): irracionales (\\(\\sqrt{2},\\ \\pi,\\ e\\dots\\))</li>
-        <li>\\(\\mathbb{R} = \\mathbb{Q} \\cup \\mathbb{I}\\): reales</li>
-      </ul>
+      <p>Cada conjunto numérico amplía al anterior. La cadena de inclusión es:</p>
+      <div class="formula-box">$$ \\mathbb{N} \\subset \\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R} \\subset \\mathbb{C} \\qquad \\mathbb{R} = \\mathbb{Q} \\cup \\mathbb{I} $$</div>
+      <div class="tbl-wrap">
+      <table class="tbl tbl--left">
+        <thead><tr><th>Conjunto</th><th>Símbolo</th><th>Qué incluye</th><th>Ejemplos</th></tr></thead>
+        <tbody>
+          <tr><td>Naturales</td><td>\\(\\mathbb{N}\\)</td><td>Los números que permiten contar (enteros positivos).</td><td>\\(1,\\ 2,\\ 3,\\ 50,\\ 100\\)</td></tr>
+          <tr><td>Enteros</td><td>\\(\\mathbb{Z}\\)</td><td>Los naturales, sus negativos y el cero. No tienen parte decimal.</td><td>\\(-9,\\ -2,\\ 0,\\ 1,\\ 6\\)</td></tr>
+          <tr><td>Racionales</td><td>\\(\\mathbb{Q}\\)</td><td>Los que se escriben como fracción \\(a/b\\;(b\\neq0)\\). Decimales exactos y periódicos.</td><td>\\(\\tfrac12,\\ -3{,}75,\\ 0{,}\\overline{3}\\)</td></tr>
+          <tr><td>Irracionales</td><td>\\(\\mathbb{I}\\)</td><td>Expresión decimal infinita no periódica; no se pueden escribir como fracción.</td><td>\\(\\sqrt2,\\ \\pi,\\ e,\\ 0{,}58763\\dots\\)</td></tr>
+          <tr><td>Reales</td><td>\\(\\mathbb{R}\\)</td><td>La unión de racionales e irracionales (\\(\\mathbb{R}=\\mathbb{Q}\\cup\\mathbb{I}\\)).</td><td>\\(-5,\\ \\tfrac34,\\ \\pi,\\ 8{,}2\\)</td></tr>
+          <tr><td>Imaginarios</td><td>\\(\\mathbb{I}m\\)</td><td>Su cuadrado es negativo; dan solución a raíces de números negativos. \\(i=\\sqrt{-1}\\).</td><td>\\(i,\\ -5i,\\ 2i\\)</td></tr>
+          <tr><td>Complejos</td><td>\\(\\mathbb{C}\\)</td><td>Extensión de los reales con la unidad imaginaria, de la forma \\(z=a+bi\\).</td><td>\\(2+3i,\\ -1+i,\\ 5\\)</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="callout tip">
+        <strong class="callout__tag">Jugá con esto</strong>
+        Poné a prueba la clasificación en el juego <a href="#/games/classify">Clasificá el número</a>.
+      </div>
+
+      <h2>Propiedades de las operaciones básicas</h2>
+
+      <h3>Suma (adición) y resta (sustracción)</h3>
+      <div class="tbl-wrap"><table class="tbl tbl--left">
+        <thead><tr><th>Propiedad</th><th>Qué dice</th><th>Forma</th></tr></thead>
+        <tbody>
+          <tr><td>Conmutativa</td><td>El orden de los sumandos no altera el resultado.</td><td>\\(a+b=b+a\\)</td></tr>
+          <tr><td>Asociativa</td><td>El modo de agrupar los sumandos no varía el resultado.</td><td>\\((a+b)+c=a+(b+c)\\)</td></tr>
+          <tr><td>Elemento neutro</td><td>Todo número sumado a cero da el mismo número.</td><td>\\(a+0=a\\)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted" style="font-size:13px">La <strong>resta no</strong> es conmutativa ni asociativa: \\(a-b\\neq b-a\\).</p>
+
+      <h3>Multiplicación y división</h3>
+      <div class="tbl-wrap"><table class="tbl tbl--left">
+        <thead><tr><th>Propiedad</th><th>Qué dice</th><th>Forma</th></tr></thead>
+        <tbody>
+          <tr><td>Conmutativa</td><td>El orden de los factores no altera el producto.</td><td>\\(a\\cdot b=b\\cdot a\\)</td></tr>
+          <tr><td>Asociativa</td><td>El modo de agrupar los factores no varía el resultado.</td><td>\\((a\\cdot b)\\cdot c=a\\cdot(b\\cdot c)\\)</td></tr>
+          <tr><td>Elemento neutro</td><td>Todo número multiplicado por 1 da el mismo número.</td><td>\\(a\\cdot 1=a\\)</td></tr>
+          <tr><td>Distributiva</td><td>El producto se reparte en cada término de la suma o resta.</td><td>\\(a\\cdot(b+c)=a\\cdot b+a\\cdot c\\)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted" style="font-size:13px">La <strong>división no</strong> es conmutativa ni asociativa, y <strong>nunca</strong> se divide por cero.</p>
+
+      <h3>Potenciación (potencia)</h3>
+      <div class="tbl-wrap"><table class="tbl tbl--left">
+        <thead><tr><th>Propiedad</th><th>Qué dice</th><th>Forma</th></tr></thead>
+        <tbody>
+          <tr><td>Producto de igual base</td><td>Se suman los exponentes.</td><td>\\(a^{m}\\cdot a^{n}=a^{m+n}\\)</td></tr>
+          <tr><td>Cociente de igual base</td><td>Se restan los exponentes.</td><td>\\(a^{m}\\div a^{n}=a^{m-n}\\)</td></tr>
+          <tr><td>Potencia de una potencia</td><td>Se multiplican los exponentes.</td><td>\\((a^{m})^{n}=a^{m\\cdot n}\\)</td></tr>
+          <tr><td>Distributiva (·, ÷)</td><td>Se distribuye respecto del producto y el cociente.</td><td>\\((a\\cdot c)^{n}=a^{n}\\cdot c^{n}\\)</td></tr>
+          <tr><td>Exponente cero / uno</td><td>Todo número (≠0) elevado a 0 da 1; elevado a 1, da sí mismo.</td><td>\\(a^{0}=1,\\quad a^{1}=a\\)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn">
+        <strong class="callout__tag">¡Cuidado!</strong>
+        La potencia <strong>no</strong> se distribuye en sumas ni restas:
+        $$ (a+b)^{n}\\neq a^{n}+b^{n} \\qquad \\text{ej.: } (3+2)^{2}=25\\neq 3^{2}+2^{2}=13 $$
+      </div>
+
+      <h3>Radicación (raíz)</h3>
+      <div class="tbl-wrap"><table class="tbl tbl--left">
+        <thead><tr><th>Propiedad</th><th>Qué dice</th><th>Forma</th></tr></thead>
+        <tbody>
+          <tr><td>Raíz de un producto</td><td>La raíz se distribuye en el producto.</td><td>\\(\\sqrt[n]{a\\cdot b}=\\sqrt[n]{a}\\cdot\\sqrt[n]{b}\\)</td></tr>
+          <tr><td>Raíz de un cociente</td><td>La raíz se separa en dividendo y divisor.</td><td>\\(\\sqrt[n]{\\tfrac{a}{b}}=\\dfrac{\\sqrt[n]{a}}{\\sqrt[n]{b}}\\)</td></tr>
+          <tr><td>Exponente fraccionario</td><td>La raíz se escribe como potencia de exponente fraccionario.</td><td>\\(\\sqrt[n]{a^{m}}=a^{m/n}\\)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn">
+        <strong class="callout__tag">¡Cuidado!</strong>
+        La raíz <strong>no</strong> se distribuye en sumas ni restas:
+        $$ \\sqrt{a+b}\\neq\\sqrt{a}+\\sqrt{b} \\qquad \\text{ej.: } \\sqrt{16+9}=5\\neq\\sqrt{16}+\\sqrt{9}=7 $$
+        Recordá además que \\(\\sqrt{x^{2}}=|x|\\).
+      </div>
+      <div class="callout tip">
+        <strong class="callout__tag">Jugá con esto</strong>
+        Repasá todas estas reglas en <a href="#/games/vof">Verdadero o Falso contrarreloj</a>.
+      </div>
 
       <h2>Valor absoluto (módulo)</h2>
       <div class="callout def">
@@ -359,6 +433,15 @@ window.APP_DATA = {
         $$ |x + y| \\le |x| + |y| \\quad\\text{(desigualdad triangular)} $$
         $$ \\big|\\,|x| - |y|\\,\\big| \\le |x - y| $$
       </div>
+      <div class="tbl-wrap"><table class="tbl tbl--left">
+        <thead><tr><th>Propiedad</th><th>Ejemplo</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td>\\(|x|\\ge 0\\)</td><td>\\(|-2|=2\\ge 0\\)</td><td>El valor absoluto siempre es positivo o cero.</td></tr>
+          <tr><td>\\(|x|=|-x|\\)</td><td>\\(|4|=|-4|=4\\)</td><td>Un número y su opuesto tienen el mismo valor absoluto.</td></tr>
+          <tr><td>\\(|x\\cdot y|=|x|\\cdot|y|\\)</td><td>\\(|-2\\cdot 7|=|-2|\\cdot|7|=14\\)</td><td>El módulo de un producto es el producto de los módulos.</td></tr>
+          <tr><td>\\(\\left|\\tfrac{x}{y}\\right|=\\tfrac{|x|}{|y|}\\)</td><td>\\(\\left|\\tfrac{8}{-5}\\right|=\\tfrac{|8|}{|-5|}=\\tfrac{8}{5}\\)</td><td>El módulo de un cociente es el cociente de los módulos.</td></tr>
+        </tbody>
+      </table></div>
 
       <h2>Ecuaciones e inecuaciones con módulo</h2>
       <div class="callout">
@@ -433,6 +516,24 @@ window.APP_DATA = {
       { q: "\\(2(x+y)=2x+2y\\) es la propiedad:",
         opts: ["Asociativa", "Conmutativa", "Distributiva", "Elemento neutro"],
         a: 2, exp: "Es la propiedad distributiva del producto respecto de la suma." },
+      { q: "\\(a^{m}\\cdot a^{n}\\) (producto de igual base) es igual a:",
+        opts: ["\\(a^{m\\cdot n}\\)", "\\(a^{m+n}\\)", "\\(a^{m-n}\\)", "\\(a^{m}+a^{n}\\)"],
+        a: 1, exp: "En el producto de igual base se SUMAN los exponentes: \\(a^{m+n}\\)." },
+      { q: "\\((a^{m})^{n}\\) (potencia de una potencia) es igual a:",
+        opts: ["\\(a^{m+n}\\)", "\\(a^{m\\cdot n}\\)", "\\(a^{m-n}\\)", "\\(a^{m^{n}}\\)"],
+        a: 1, exp: "Potencia de una potencia: se MULTIPLICAN los exponentes, \\(a^{m\\cdot n}\\)." },
+      { q: "¿Cuánto vale \\(a^{0}\\) con \\(a\\neq 0\\)?",
+        opts: ["\\(0\\)", "\\(1\\)", "\\(a\\)", "No está definido"],
+        a: 1, exp: "Todo número distinto de cero elevado a 0 da 1." },
+      { q: "El elemento neutro de la multiplicación es:",
+        opts: ["\\(0\\)", "\\(1\\)", "El mismo número", "\\(-1\\)"],
+        a: 1, exp: "\\(a\\cdot 1=a\\): el neutro multiplicativo es 1 (el de la suma es 0)." },
+      { q: "\\(\\sqrt[n]{a^{m}}\\) escrito como potencia es:",
+        opts: ["\\(a^{n/m}\\)", "\\(a^{m/n}\\)", "\\(a^{m\\cdot n}\\)", "\\(a^{m-n}\\)"],
+        a: 1, exp: "El radicando pasa a exponente fraccionario: \\(\\sqrt[n]{a^{m}}=a^{m/n}\\)." },
+      { q: "¿Cuál es FALSA?",
+        opts: ["\\((a\\cdot b)^{n}=a^{n}b^{n}\\)", "\\((a+b)^{2}=a^{2}+b^{2}\\)", "\\(\\sqrt[n]{ab}=\\sqrt[n]{a}\\sqrt[n]{b}\\)", "\\(a^{m}\\cdot a^{n}=a^{m+n}\\)"],
+        a: 1, exp: "La potencia NO se distribuye en la suma: \\((a+b)^{2}=a^{2}+2ab+b^{2}\\), no \\(a^{2}+b^{2}\\)." },
     ],
     cards: [
       { q: "Cadena de conjuntos numéricos", a: "\\(\\mathbb{N}\\subset\\mathbb{Z}\\subset\\mathbb{Q}\\subset\\mathbb{R}\\); además \\(\\mathbb{R}=\\mathbb{Q}\\cup\\mathbb{I}\\)." },
@@ -446,6 +547,12 @@ window.APP_DATA = {
       { q: "\\(|x| = a\\) (a>0)", a: "\\(x = a \\;\\vee\\; x = -a\\)" },
       { q: "Distancia entre x e y", a: "\\(|x - y| = |y - x|\\)" },
       { q: "Desigualdad triangular", a: "\\(|x + y| \\le |x| + |y|\\)" },
+      { q: "Producto de igual base", a: "\\(a^{m}\\cdot a^{n}=a^{m+n}\\) (se suman los exponentes)." },
+      { q: "Cociente de igual base", a: "\\(a^{m}\\div a^{n}=a^{m-n}\\) (se restan los exponentes)." },
+      { q: "Potencia de una potencia", a: "\\((a^{m})^{n}=a^{m\\cdot n}\\) (se multiplican)." },
+      { q: "Exponente fraccionario", a: "\\(\\sqrt[n]{a^{m}}=a^{m/n}\\)." },
+      { q: "¿La potencia/raíz se distribuye en sumas?", a: "NO: \\((a+b)^{n}\\neq a^{n}+b^{n}\\) y \\(\\sqrt{a+b}\\neq\\sqrt a+\\sqrt b\\)." },
+      { q: "Elementos neutros", a: "Suma: 0 (\\(a+0=a\\)). Producto: 1 (\\(a\\cdot1=a\\))." },
     ]
   },
 
