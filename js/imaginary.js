@@ -56,21 +56,29 @@
       else if ("+-*/^".includes(c)) { t.push({ t: "op", v: c }); i++; }
       else if (c === "(") { t.push({ t: "(" }); i++; }
       else if (c === ")") { t.push({ t: ")" }); i++; }
+      else if (c === "|") { t.push({ t: "bar" }); i++; }
       else throw new Error("Símbolo no reconocido: «" + c + "»");
     }
     return t;
   }
+  const valueEnds = tk => tk && (tk.t === "num" || tk.t === "i" || tk.t === ")" || tk.t === "mclose");
   function prep(tokens) {
-    const out = [];
-    for (const tk of tokens) {
+    const out = []; let depth = 0;
+    for (const raw of tokens) {
+      let tk = raw;
+      // las barras | abren o cierran un módulo según el contexto
+      if (tk.t === "bar") {
+        tk = (depth > 0 && valueEnds(out[out.length - 1])) ? (depth--, { t: "mclose" }) : (depth++, { t: "mopen" });
+      }
       const prev = out[out.length - 1];
       if (prev) {
-        const endsFactor = prev.t === "num" || prev.t === "i" || prev.t === ")";
-        const startsFactor = tk.t === "num" || tk.t === "i" || tk.t === "(" || tk.t === "sqrt";
+        const endsFactor = prev.t === "num" || prev.t === "i" || prev.t === ")" || prev.t === "mclose";
+        const startsFactor = tk.t === "num" || tk.t === "i" || tk.t === "(" || tk.t === "sqrt" || tk.t === "mopen";
         if (endsFactor && startsFactor) out.push({ t: "op", v: "*" });
       }
       if (tk.t === "op" && (tk.v === "+" || tk.v === "-")) {
-        const unary = !prev || prev.t === "op" || prev.t === "(" || prev.t === "sqrt";
+        const p = out[out.length - 1];
+        const unary = !p || p.t === "op" || p.t === "(" || p.t === "sqrt" || p.t === "mopen";
         if (unary) { if (tk.v === "-") out.push({ t: "op", v: "u-" }); continue; }
       }
       out.push(tk);
@@ -95,14 +103,31 @@
         }
         ops.push({ t: "op", v: o1 });
       }
-      else if (tk.t === "(") ops.push(tk);
+      else if (tk.t === "(" || tk.t === "mopen") ops.push(tk);
       else if (tk.t === ")") {
-        while (ops.length && ops[ops.length - 1].t !== "(") out.push(ops.pop());
+        while (ops.length && ops[ops.length - 1].t !== "(") {
+          if (ops[ops.length - 1].t === "mopen") throw new Error("Barra | sin cerrar dentro de paréntesis.");
+          out.push(ops.pop());
+        }
         if (!ops.length) throw new Error("Paréntesis sin abrir.");
         ops.pop();
       }
+      else if (tk.t === "mclose") {
+        while (ops.length && ops[ops.length - 1].t !== "mopen") {
+          if (ops[ops.length - 1].t === "(") throw new Error("Paréntesis sin cerrar dentro de | |.");
+          out.push(ops.pop());
+        }
+        if (!ops.length) throw new Error("Falta abrir la barra | del módulo.");
+        ops.pop();
+        out.push({ t: "op", v: "mod" });
+      }
     }
-    while (ops.length) { const o = ops.pop(); if (o.t === "(") throw new Error("Paréntesis sin cerrar."); out.push(o); }
+    while (ops.length) {
+      const o = ops.pop();
+      if (o.t === "(") throw new Error("Paréntesis sin cerrar.");
+      if (o.t === "mopen") throw new Error("Falta cerrar la barra | del módulo.");
+      out.push(o);
+    }
     return out;
   }
   function evalRPN(rpn) {
@@ -114,6 +139,7 @@
         const v = tk.v;
         if (v === "sqrt") { if (!st.length) throw new Error("Expresión incompleta."); st.push(csqrt(st.pop())); }
         else if (v === "u-") { if (!st.length) throw new Error("Expresión incompleta."); st.push(cneg(st.pop())); }
+        else if (v === "mod") { if (!st.length) throw new Error("Expresión incompleta."); const a = st.pop(); st.push(C(Math.hypot(a.re, a.im), 0)); }
         else {
           if (st.length < 2) throw new Error("Expresión incompleta.");
           const b = st.pop(), a = st.pop();
@@ -134,7 +160,7 @@
   function evaluate(src) { return evalRPN(toRPN(prep(tokenize(normalize(src))))); }
 
   /* ---------- UI ---------- */
-  const EXAMPLES = ["(2+3i)+(1-i)", "(1+i)(1-i)", "i^23", "(1+i)^2", "√-16", "(3+4i)/(1-2i)", "i^7+i^13", "√-8"];
+  const EXAMPLES = ["(2+3i)+(1-i)", "(1+i)(1-i)", "i^23", "(1+i)^2", "√-16", "(3+4i)/(1-2i)", "|3+4i|", "|6+8i|-|5i|"];
 
   function build(container) {
     container.innerHTML = `
@@ -153,9 +179,11 @@
           <button data-ins="√">√</button>
           <button data-ins="(">(</button>
           <button data-ins=")">)</button>
+          <button data-ins="|" title="Módulo: escribí |z|">|&nbsp;|</button>
         </div>
         <p class="muted" style="font-size:12.5px">
-          Operá con <code>i</code>, potencias <code>^</code>, <code>√</code> de negativos (\\(\\sqrt{-16}=4i\\)) y paréntesis.
+          Operá con <code>i</code>, potencias <code>^</code>, <code>√</code> de negativos (\\(\\sqrt{-16}=4i\\)),
+          <strong>módulo</strong> con barras (\\(|3+4i|=5\\)) y paréntesis.
           La multiplicación puede ser implícita: <code>(1+i)(1-i)</code> o <code>3i</code>.
         </p>
         <div class="venn-chips" id="im-ex">${EXAMPLES.map(e => `<button data-ex="${e}">${e}</button>`).join("")}</div>
