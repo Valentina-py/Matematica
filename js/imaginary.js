@@ -28,20 +28,34 @@
     return C(re, im);
   }
 
-  /* ---------- formato ---------- */
-  function nice(n) {
-    if (!isFinite(n)) return "∞";
-    let r = Math.round(n * 1e9) / 1e9;
-    if (Object.is(r, -0)) r = 0;
-    return String(r);
+  /* ---------- formato (muestra fracciones cuando el valor es exacto) ---------- */
+  function round9(n) { const r = Math.round(n * 1e9) / 1e9; return Object.is(r, -0) ? 0 : r; }
+  function approxFrac(x) {
+    const sign = x < 0 ? -1 : 1; x = Math.abs(x);
+    for (let d = 1; d <= 64; d++) {
+      const n = Math.round(x * d);
+      if (Math.abs(n / d - x) < 1e-7) return { n: sign * n, d: d };
+    }
+    return null;
   }
+  // número → LaTeX: entero, fracción \tfrac, o decimal
+  function numTex(x) {
+    x = round9(x);
+    if (Number.isInteger(x)) return String(x);
+    const f = approxFrac(x);
+    if (f && f.d !== 1) return `\\tfrac{${f.n}}{${f.d}}`;
+    return String(x);
+  }
+  function nice(n) { return isFinite(n) ? numTex(n) : "∞"; }
+  // complejo → LaTeX en forma a+bi
   function fmt(z) {
-    let re = Math.round(z.re * 1e9) / 1e9, im = Math.round(z.im * 1e9) / 1e9;
-    if (Object.is(re, -0)) re = 0; if (Object.is(im, -0)) im = 0;
-    if (im === 0) return nice(re);
-    const imAbs = Math.abs(im) === 1 ? "i" : nice(Math.abs(im)) + "i";
-    if (re === 0) return (im < 0 ? "-" : "") + imAbs;
-    return nice(re) + (im < 0 ? " - " : " + ") + imAbs;
+    const re = round9(z.re), im = round9(z.im);
+    if (im === 0) return numTex(re);
+    const neg = im < 0, a = Math.abs(im);
+    const coef = Math.abs(a - 1) < 1e-12 ? "" : numTex(a);
+    const imPart = coef + "i";
+    if (re === 0) return (neg ? "-" : "") + imPart;
+    return numTex(re) + (neg ? " - " : " + ") + imPart;
   }
 
   /* ---------- parser (tokenizar → implícitos/unario → RPN → evaluar) ---------- */
@@ -51,7 +65,13 @@
     while (i < s.length) {
       const c = s[i];
       if (/[0-9.]/.test(c)) { let j = i + 1; while (j < s.length && /[0-9.]/.test(s[j])) j++; t.push({ t: "num", v: parseFloat(s.slice(i, j)) }); i = j; }
-      else if (c === "i") { t.push({ t: "i" }); i++; }
+      else if (/[a-zA-Z]/.test(c)) {
+        let j = i + 1; while (j < s.length && /[a-zA-Z]/.test(s[j])) j++;
+        const w = s.slice(i, j).toLowerCase(); i = j;
+        if (w === "i") t.push({ t: "i" });
+        else if (w === "conj") t.push({ t: "func", v: "conj" });
+        else throw new Error("No reconozco «" + w + "». Usá i, conj o √.");
+      }
       else if (c === "√") { t.push({ t: "sqrt" }); i++; }
       else if ("+-*/^".includes(c)) { t.push({ t: "op", v: c }); i++; }
       else if (c === "(") { t.push({ t: "(" }); i++; }
@@ -73,25 +93,26 @@
       const prev = out[out.length - 1];
       if (prev) {
         const endsFactor = prev.t === "num" || prev.t === "i" || prev.t === ")" || prev.t === "mclose";
-        const startsFactor = tk.t === "num" || tk.t === "i" || tk.t === "(" || tk.t === "sqrt" || tk.t === "mopen";
+        const startsFactor = tk.t === "num" || tk.t === "i" || tk.t === "(" || tk.t === "sqrt" || tk.t === "mopen" || tk.t === "func";
         if (endsFactor && startsFactor) out.push({ t: "op", v: "*" });
       }
       if (tk.t === "op" && (tk.v === "+" || tk.v === "-")) {
         const p = out[out.length - 1];
-        const unary = !p || p.t === "op" || p.t === "(" || p.t === "sqrt" || p.t === "mopen";
+        const unary = !p || p.t === "op" || p.t === "(" || p.t === "sqrt" || p.t === "mopen" || p.t === "func";
         if (unary) { if (tk.v === "-") out.push({ t: "op", v: "u-" }); continue; }
       }
       out.push(tk);
     }
     return out;
   }
-  const PREC = { "+": 2, "-": 2, "*": 3, "/": 3, "^": 4, "u-": 5, "sqrt": 5 };
-  const RIGHT = { "^": true, "u-": true, "sqrt": true };
+  const PREC = { "+": 2, "-": 2, "*": 3, "/": 3, "^": 4, "u-": 5, "sqrt": 5, "conj": 5 };
+  const RIGHT = { "^": true, "u-": true, "sqrt": true, "conj": true };
   function toRPN(tokens) {
     const out = [], ops = [];
     for (const tk of tokens) {
       if (tk.t === "num" || tk.t === "i") out.push(tk);
       else if (tk.t === "sqrt") ops.push({ t: "op", v: "sqrt" });
+      else if (tk.t === "func") ops.push({ t: "op", v: tk.v });
       else if (tk.t === "op") {
         const o1 = tk.v;
         while (ops.length) {
@@ -140,6 +161,7 @@
         if (v === "sqrt") { if (!st.length) throw new Error("Expresión incompleta."); st.push(csqrt(st.pop())); }
         else if (v === "u-") { if (!st.length) throw new Error("Expresión incompleta."); st.push(cneg(st.pop())); }
         else if (v === "mod") { if (!st.length) throw new Error("Expresión incompleta."); const a = st.pop(); st.push(C(Math.hypot(a.re, a.im), 0)); }
+        else if (v === "conj") { if (!st.length) throw new Error("Expresión incompleta."); const a = st.pop(); st.push(C(a.re, -a.im)); }
         else {
           if (st.length < 2) throw new Error("Expresión incompleta.");
           const b = st.pop(), a = st.pop();
@@ -160,7 +182,7 @@
   function evaluate(src) { return evalRPN(toRPN(prep(tokenize(normalize(src))))); }
 
   /* ---------- UI ---------- */
-  const EXAMPLES = ["(2+3i)+(1-i)", "(1+i)(1-i)", "i^23", "(1+i)^2", "√-16", "(3+4i)/(1-2i)", "|3+4i|", "|6+8i|-|5i|"];
+  const EXAMPLES = ["(2+3i)+(1-i)", "(1+i)(1-i)", "i^23", "√-16", "(3+4i)/(1-2i)", "|3+4i|", "conj(2+3i)", "(1+i)/2"];
 
   function build(container) {
     container.innerHTML = `
@@ -180,11 +202,13 @@
           <button data-ins="(">(</button>
           <button data-ins=")">)</button>
           <button data-ins="|" title="Módulo: escribí |z|">|&nbsp;|</button>
+          <button data-ins="conj(" title="Conjugado de z">conj</button>
         </div>
         <p class="muted" style="font-size:12.5px">
           Operá con <code>i</code>, potencias <code>^</code>, <code>√</code> de negativos (\\(\\sqrt{-16}=4i\\)),
-          <strong>módulo</strong> con barras (\\(|3+4i|=5\\)) y paréntesis.
-          La multiplicación puede ser implícita: <code>(1+i)(1-i)</code> o <code>3i</code>.
+          <strong>módulo</strong> <code>|z|</code> (\\(|3+4i|=5\\)), <strong>conjugado</strong> <code>conj(...)</code> y paréntesis.
+          <br>La <code>√</code> y <code>conj</code> toman <strong>solo lo que sigue</strong>: para varios términos usá paréntesis, p. ej. <code>√(16+9)</code>.
+          Las <strong>fracciones</strong> van con <code>/</code> (<code>(1+i)/2</code>); la multiplicación puede ser implícita (<code>(1+i)(1-i)</code>).
         </p>
         <div class="venn-chips" id="im-ex">${EXAMPLES.map(e => `<button data-ex="${e}">${e}</button>`).join("")}</div>
         <div id="im-out"></div>
@@ -220,9 +244,9 @@
             <div style="font-size:24px;font-weight:700">\\(${fmt(z)}\\)</div>
           </div>
           <div class="stat-row" style="margin-top:14px">
-            <div class="stat"><div class="stat__num">${nice(z.re)}</div><div class="stat__label">Parte real</div></div>
-            <div class="stat"><div class="stat__num">${nice(z.im)}</div><div class="stat__label">Parte imaginaria</div></div>
-            <div class="stat"><div class="stat__num">${nice(mod)}</div><div class="stat__label">Módulo |z|</div></div>
+            <div class="stat"><div class="stat__num">\\(${nice(z.re)}\\)</div><div class="stat__label">Parte real</div></div>
+            <div class="stat"><div class="stat__num">\\(${nice(z.im)}\\)</div><div class="stat__label">Parte imaginaria</div></div>
+            <div class="stat"><div class="stat__num">\\(${nice(mod)}\\)</div><div class="stat__label">Módulo |z|</div></div>
             <div class="stat"><div class="stat__num" style="font-size:20px">\\(${fmt(conj)}\\)</div><div class="stat__label">Conjugado</div></div>
           </div>`;
         if (window.MathJaxRender) window.MathJaxRender(out);
