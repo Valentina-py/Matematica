@@ -641,6 +641,10 @@ window.APP_DATA = {
         <strong class="callout__tag">Calculadora</strong>
         Operá complejos (suma, producto, cociente, módulo, conjugado y potencias de \\(i\\)) en la <a href="#/tool/complejos">Calculadora de complejos</a>.
       </div>
+      <div class="callout tip">
+        <strong class="callout__tag">Expresiones con i</strong>
+        ¿Querés escribir una cuenta entera como \\((1+i)(1-i)\\), \\(i^{23}\\) o \\(\\sqrt{-16}\\)? Usá la herramienta <a href="#/tool/imaginarios">Números imaginarios</a>.
+      </div>
     `,
     quiz: [
       { q: "El valor de \\(i^{2}\\) es:",

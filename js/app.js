@@ -51,12 +51,13 @@
     calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 11v4M8 18h4"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/>',
     root: '<path d="M3 12h2.6l3 8L13 4h8"/>',
+    imag: '<circle cx="12" cy="5.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 10v9"/>',
   };
   function icon(name, cls) {
     return `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
   }
-  const UNIT_TOOL_ICON = { logica: "truth", conjuntos: "venn", reales: "ruler", complejos: "spiral", radicales: "root" };
+  const UNIT_TOOL_ICON = { logica: "truth", conjuntos: "venn", reales: "ruler", complejos: "spiral", radicales: "root", imaginarios: "imag" };
   // badge con el glifo matemático de la unidad
   function badge(glyph, big) { return `<span class="ubadge${big ? " ubadge--lg" : ""}">${glyph}</span>`; }
 
@@ -124,6 +125,7 @@
     html += navItem("#/tool/reales", icon("ruler"), "Valor absoluto", null);
     html += navItem("#/tool/complejos", icon("spiral"), "Calculadora complejos", null);
     html += navItem("#/tool/radicales", icon("root"), "Suma de radicales", null);
+    html += navItem("#/tool/imaginarios", icon("imag"), "Números imaginarios", null);
     html += `<div class="nav__group-title">Práctica</div>`;
     html += navItem("#/practica", icon("practice"), "Ejercicios (TP)", null);
     html += navItem("#/cards", icon("cards"), "Flashcards", null);
@@ -208,7 +210,7 @@
 
       <div class="stat-row">
         <div class="stat"><div class="stat__num">${UNITS.length}</div><div class="stat__label">Unidades</div></div>
-        <div class="stat"><div class="stat__num">5</div><div class="stat__label">Herramientas</div></div>
+        <div class="stat"><div class="stat__num">6</div><div class="stat__label">Herramientas</div></div>
         <div class="stat"><div class="stat__num">${GAMES.length}</div><div class="stat__label">Juegos</div></div>
         <div class="stat"><div class="stat__num">${totalEx}</div><div class="stat__label">Ejercicios TP</div></div>
         <div class="stat"><div class="stat__num">${globalPct()}%</div><div class="stat__label">Progreso</div></div>
@@ -224,6 +226,7 @@
         ${toolCard("#/tool/reales","ruler","Valor absoluto","Resolvé ecuaciones e inecuaciones con módulo.")}
         ${toolCard("#/tool/complejos","spiral","Calculadora de complejos","Operá z, w, módulo, conjugado y potencias de i.")}
         ${toolCard("#/tool/radicales","root","Suma de radicales","Simplificá y sumá raíces cuadradas semejantes.")}
+        ${toolCard("#/tool/imaginarios","imag","Números imaginarios","Evaluá expresiones con i: potencias, √ de negativos y más.")}
       </div>
 
       <h2>Para practicar</h2>
@@ -297,6 +300,7 @@
       reales: ["Valor absoluto", "Resolvé ecuaciones e inecuaciones con módulo y vé el intervalo en la recta."],
       complejos: ["Calculadora de complejos", "Suma, resta, producto, cociente, módulo, conjugado y potencias de i."],
       radicales: ["Suma de radicales", "Simplificá y sumá raíces cuadradas semejantes con el paso a paso."],
+      imaginarios: ["Números imaginarios", "Evaluá expresiones con i, √ de negativos, potencias y paréntesis; obtené a+bi."],
     };
     const t = titles[id];
     if (!t || !window.Tools[id]) return renderHome();
@@ -640,6 +644,7 @@
      ["Valor absoluto","Herramienta","#/tool/reales"],
      ["Calculadora de complejos","Herramienta","#/tool/complejos"],
      ["Suma de radicales","Herramienta","#/tool/radicales"],
+     ["Números imaginarios","Herramienta","#/tool/imaginarios"],
      ["Ejercicios de los TP","Práctica","#/practica"],
      ["Autoevaluación","Práctica","#/quiz"],
      ["Flashcards","Práctica","#/cards"],
