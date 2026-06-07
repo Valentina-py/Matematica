@@ -408,6 +408,10 @@ window.APP_DATA = {
         <strong class="callout__tag">Jugá con esto</strong>
         Repasá todas estas reglas en <a href="#/games/vof">Verdadero o Falso contrarreloj</a>.
       </div>
+      <div class="callout tip">
+        <strong class="callout__tag">Calculadora</strong>
+        Sumá radicales semejantes (como \\(3\\sqrt{20}-5\\sqrt{45}+2\\sqrt{80}-\\sqrt{125}\\)) paso a paso en la <a href="#/tool/radicales">Suma de radicales</a>.
+      </div>
 
       <h2>Valor absoluto (módulo)</h2>
       <div class="callout def">
