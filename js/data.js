@@ -388,6 +388,10 @@ window.APP_DATA = {
         La potencia <strong>no</strong> se distribuye en sumas ni restas:
         $$ (a+b)^{n}\\neq a^{n}+b^{n} \\qquad \\text{ej.: } (3+2)^{2}=25\\neq 3^{2}+2^{2}=13 $$
       </div>
+      <div class="callout tip">
+        <strong class="callout__tag">Calculadora</strong>
+        Evaluá potencias (incluso \\(2^{-2}\\) o \\(8^{1/3}\\)) y vé la propiedad en la herramienta <a href="#/tool/potencias">Potencias</a>.
+      </div>
 
       <h3>Radicación (raíz)</h3>
       <div class="tbl-wrap"><table class="tbl tbl--left">
