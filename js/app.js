@@ -58,7 +58,7 @@
     return `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
   }
-  const UNIT_TOOL_ICON = { logica: "truth", conjuntos: "venn", reales: "ruler", complejos: "spiral", radicales: "root", imaginarios: "imag", potencias: "power" };
+  const UNIT_TOOL_ICON = { logica: "truth", conjuntos: "venn", reales: "ruler", complejos: "spiral", radicales: "root", calc: "calc" };
   // badge con el glifo matemático de la unidad
   function badge(glyph, big) { return `<span class="ubadge${big ? " ubadge--lg" : ""}">${glyph}</span>`; }
 
@@ -126,8 +126,7 @@
     html += navItem("#/tool/reales", icon("ruler"), "Valor absoluto", null);
     html += navItem("#/tool/complejos", icon("spiral"), "Calculadora complejos", null);
     html += navItem("#/tool/radicales", icon("root"), "Suma de radicales", null);
-    html += navItem("#/tool/imaginarios", icon("imag"), "Números imaginarios", null);
-    html += navItem("#/tool/potencias", icon("power"), "Potencias", null);
+    html += navItem("#/tool/calc", icon("calc"), "Calculadora", null);
     html += `<div class="nav__group-title">Práctica</div>`;
     html += navItem("#/practica", icon("practice"), "Ejercicios (TP)", null);
     html += navItem("#/cards", icon("cards"), "Flashcards", null);
@@ -212,7 +211,7 @@
 
       <div class="stat-row">
         <div class="stat"><div class="stat__num">${UNITS.length}</div><div class="stat__label">Unidades</div></div>
-        <div class="stat"><div class="stat__num">7</div><div class="stat__label">Herramientas</div></div>
+        <div class="stat"><div class="stat__num">6</div><div class="stat__label">Herramientas</div></div>
         <div class="stat"><div class="stat__num">${GAMES.length}</div><div class="stat__label">Juegos</div></div>
         <div class="stat"><div class="stat__num">${totalEx}</div><div class="stat__label">Ejercicios TP</div></div>
         <div class="stat"><div class="stat__num">${globalPct()}%</div><div class="stat__label">Progreso</div></div>
@@ -228,8 +227,7 @@
         ${toolCard("#/tool/reales","ruler","Valor absoluto","Resolvé ecuaciones e inecuaciones con módulo.")}
         ${toolCard("#/tool/complejos","spiral","Calculadora de complejos","Operá z, w, módulo, conjugado y potencias de i.")}
         ${toolCard("#/tool/radicales","root","Suma de radicales","Simplificá y sumá raíces cuadradas semejantes.")}
-        ${toolCard("#/tool/imaginarios","imag","Números imaginarios","Evaluá expresiones con i: potencias, √ de negativos y más.")}
-        ${toolCard("#/tool/potencias","power","Potencias","Potencias con exponentes negativos y fraccionarios, con la propiedad.")}
+        ${toolCard("#/tool/calc","calc","Calculadora","Reales y complejos: potencias, raíces, i, módulo y conjugado.")}
       </div>
 
       <h2>Para practicar</h2>
@@ -303,8 +301,7 @@
       reales: ["Valor absoluto", "Resolvé ecuaciones e inecuaciones con módulo y vé el intervalo en la recta."],
       complejos: ["Calculadora de complejos", "Suma, resta, producto, cociente, módulo, conjugado y potencias de i."],
       radicales: ["Suma de radicales", "Simplificá y sumá raíces cuadradas semejantes con el paso a paso."],
-      imaginarios: ["Números imaginarios", "Evaluá expresiones con i, √ de negativos, potencias y paréntesis; obtené a+bi."],
-      potencias: ["Potencias", "Evaluá potencias con exponentes enteros, negativos o fraccionarios (raíces) y vé la propiedad."],
+      calc: ["Calculadora", "Operá números reales y complejos: potencias, raíces, i, módulo, conjugado y fracciones."],
     };
     const t = titles[id];
     if (!t || !window.Tools[id]) return renderHome();
@@ -648,8 +645,7 @@
      ["Valor absoluto","Herramienta","#/tool/reales"],
      ["Calculadora de complejos","Herramienta","#/tool/complejos"],
      ["Suma de radicales","Herramienta","#/tool/radicales"],
-     ["Números imaginarios","Herramienta","#/tool/imaginarios"],
-     ["Potencias","Herramienta","#/tool/potencias"],
+     ["Calculadora","Herramienta","#/tool/calc"],
      ["Ejercicios de los TP","Práctica","#/practica"],
      ["Autoevaluación","Práctica","#/quiz"],
      ["Flashcards","Práctica","#/cards"],

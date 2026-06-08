@@ -390,7 +390,7 @@ window.APP_DATA = {
       </div>
       <div class="callout tip">
         <strong class="callout__tag">Calculadora</strong>
-        Evaluá potencias (incluso \\(2^{-2}\\) o \\(8^{1/3}\\)) y vé la propiedad en la herramienta <a href="#/tool/potencias">Potencias</a>.
+        Evaluá potencias (incluso \\(2^{-2}\\) o \\(8^{1/3}\\)) y vé la propiedad en la <a href="#/tool/calc">Calculadora</a>.
       </div>
 
       <h3>Radicación (raíz)</h3>
@@ -647,7 +647,7 @@ window.APP_DATA = {
       </div>
       <div class="callout tip">
         <strong class="callout__tag">Expresiones con i</strong>
-        ¿Querés escribir una cuenta entera como \\((1+i)(1-i)\\), \\(i^{23}\\) o \\(\\sqrt{-16}\\)? Usá la herramienta <a href="#/tool/imaginarios">Números imaginarios</a>.
+        ¿Querés escribir una cuenta entera como \\((1+i)(1-i)\\), \\(i^{23}\\) o \\(\\sqrt{-16}\\)? Usá la <a href="#/tool/calc">Calculadora</a>.
       </div>
     `,
     quiz: [
