@@ -1,0 +1,19 @@
+{
+  "name": "Estudio Matemática",
+  "short_name": "Matemática",
+  "description": "Plataforma interactiva de estudio de Matemática: lógica, conjuntos, números reales y complejos, radicales, herramientas y juegos.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c1116",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
